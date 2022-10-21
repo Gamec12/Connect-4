@@ -5,7 +5,8 @@
 #include "Stack.h";
 int main()
 {
-    std::cout << "Hello World!\n";
+	const int SIZE = 7;
+	Stack arr[SIZE];
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
