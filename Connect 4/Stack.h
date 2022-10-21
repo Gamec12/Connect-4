@@ -1,33 +1,24 @@
 #pragma once
 const int SIZE = 6;
+typedef int ElementType;
 class Stack
 {
 private:
-	typedef int ElementType;
+	
 	ElementType arr[SIZE];
 	int myTop;
 public:
-	Stack()
-	{
-		myTop = -1;
-	}
+	Stack();
+	
 
-	void push(ElementType item)
-	{
-		myTop++;
-		arr[myTop] = item;
-	}
+	void push(ElementType item);
+	
 
-	ElementType top()
-	{
-		return arr[myTop];
-	}
+	ElementType top();
+	
 
-	void pop()
-	{
-		arr[myTop] = 0;
-		myTop--;
-	}
+	void pop();
+	
 
 };
 
