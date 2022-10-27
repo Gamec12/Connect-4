@@ -1,24 +1,48 @@
 #pragma once
+#include <iostream>
+using namespace std;
 const int SIZE = 6;
 typedef int ElementType;
 class Stack
 {
 private:
 	
-	ElementType arr[SIZE];
-	int myTop;
+	class Node {
+	public:
+		
+		Node* next;
+		ElementType data; 
+		Node():next(0)
+		{
+
+		}
+
+		Node(ElementType data) :data(data), next(0)
+		{
+
+		}
+	};
 public:
-	Stack();
-	
 
-	void push(ElementType item);
-	
+	Stack(); // default constructor
 
-	ElementType top();
-	
+	Stack(const Stack& orig); // copy constructor to copy what is in one stack to another stack
 
-	void pop();
-	
+	~Stack(); // destuctor to unassign the memory
 
+	bool empty() const; // returns true if the list is empty
+	void push(const ElementType &item); // to add an item to the top
+
+	void pop(); // to remove item from the top
+
+	ElementType top()const;// returns the top element in the list
+
+	void display(ostream& out) const;
+
+	const Stack& operator= (const Stack& rightSide);
+
+	typedef Node* NodePointer;
+	 NodePointer myTop;
+	
 };
 

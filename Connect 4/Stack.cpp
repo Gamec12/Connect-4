@@ -1,23 +1,87 @@
 #include "Stack.h"
-
-Stack::Stack()
+Stack::Stack() :myTop(0)
 {
-	myTop = -1;
+
 }
 
-void Stack::push(ElementType item)
+Stack::Stack(const Stack& original)
 {
-	myTop++;
-	arr[myTop] = item;
+
+	myTop = new Node(original.myTop->data);
+	NodePointer ptr = myTop;
+	NodePointer ptr2 = original.myTop->next;
+	while (ptr2 != nullptr)
+	{
+		ptr->next = new Node(ptr2->data);
+		ptr = ptr->next;
+		ptr2 = ptr2->next;
+	}
+
 }
 
-ElementType Stack::top()
+Stack::~Stack()
 {
-	return arr[myTop];
+	NodePointer ptr = myTop;
+	while (myTop != nullptr)
+	{
+		myTop = myTop->next;
+		delete(ptr);
+		ptr = myTop;
+	}
+	//delete(myTop);
 }
+
+const Stack& Stack::operator= (const Stack& rightHandSide)
+{
+	if (this != &rightHandSide)
+	{
+		this->~Stack();
+
+		NodePointer ptr = new Node(rightHandSide.myTop->data), ptr2 = rightHandSide.myTop->next;
+		myTop = ptr;
+		while (ptr2 != nullptr)
+		{
+			ptr->next = new Node(ptr2->data);
+			ptr = ptr->next;
+			ptr2 = ptr2->next;
+		}
+	}
+	return *this;
+}
+
+
+bool Stack::empty() const
+{
+	return myTop == 0;
+}
+
+void Stack::push(const ElementType& value)
+{
+	Node* ptr = new Node(value);
+	ptr->next = myTop;
+	myTop = ptr;
+}
+
+
 
 void Stack::pop()
 {
-	arr[myTop] = 0;
-	myTop--;
+	Node* ptr = myTop;
+	myTop = myTop->next;
+	delete(ptr);
+}
+
+void Stack::display(ostream& out) const
+{
+	NodePointer ptr = myTop;
+	while (ptr != NULL)
+	{
+		out << ptr->data;
+		ptr = ptr->next;
+	}
+}
+
+ElementType Stack::top() const
+{
+	return myTop->data;
 }
