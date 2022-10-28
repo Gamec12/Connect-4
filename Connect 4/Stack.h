@@ -44,6 +44,8 @@ public:
 
 	string toString();
 
+	int getSize();
+
 	typedef Node* NodePointer;
 	 NodePointer myTop;
 	 int size;

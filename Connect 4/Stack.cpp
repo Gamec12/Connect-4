@@ -60,6 +60,7 @@ void Stack::push(const ElementType& value)
 	Node* ptr = new Node(value);
 	ptr->next = myTop;
 	myTop = ptr;
+	size++;
 }
 
 
@@ -98,4 +99,8 @@ string Stack::toString()
 	}
 	return s1;
 	
+}
+int Stack::getSize()
+{
+	return size;
 }
