@@ -1,8 +1,9 @@
 #pragma once
 #include <iostream>
 using namespace std;
-const int SIZE = 6;
-typedef int ElementType;
+
+
+typedef string ElementType;
 class Stack
 {
 private:
@@ -41,8 +42,12 @@ public:
 
 	const Stack& operator= (const Stack& rightSide);
 
+	string toString();
+
 	typedef Node* NodePointer;
 	 NodePointer myTop;
+	 int size;
+	 const int capacity = 6;
 	
 };
 

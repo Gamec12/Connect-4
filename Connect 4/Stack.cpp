@@ -1,12 +1,12 @@
 #include "Stack.h"
 Stack::Stack() :myTop(0)
 {
-
+	Stack::size = 0;
 }
 
 Stack::Stack(const Stack& original)
 {
-
+	size = 0;
 	myTop = new Node(original.myTop->data);
 	NodePointer ptr = myTop;
 	NodePointer ptr2 = original.myTop->next;
@@ -84,4 +84,18 @@ void Stack::display(ostream& out) const
 ElementType Stack::top() const
 {
 	return myTop->data;
+}
+
+string Stack::toString()
+{
+	string s1 = "";
+
+	NodePointer ptr = myTop;
+	while (ptr != NULL)
+	{
+		s1 += ptr->data;
+		ptr = ptr->next;
+	}
+	return s1;
+	
 }
