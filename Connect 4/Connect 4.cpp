@@ -8,10 +8,9 @@
 using namespace std;
 int pickAPlace();
 void displayTheBoard(Stack s1[], const int NUMBEROFSTACKS);
-int player1Turn(Stack s1[]);
-int player2Turn(Stack s1[]);
-bool CheckForWin(Stack s1[], int pos);
-bool CheckForWin(Stack s1[], int pos);
+int Turn(Stack s1[] , string);
+//bool CheckForWin(Stack s1[], int pos);
+bool CheckForWin(Stack s1[], int pos , char);
 int main()
 {
 	const int NUMBEROFSTACKS = 7;
@@ -33,15 +32,25 @@ int main()
 			the board will be displayed after every token is placed
 			this will repat over and over until one player wins
 		*/
-		pos = player1Turn(s1);
+		pos = Turn(s1, "A");
 		displayTheBoard(s1, NUMBEROFSTACKS);
-		if (CheckForWin(s1, pos))
+		if (CheckForWin(s1, pos , 'A'))
+		{
+			cout << "Player 1 has won (A)";
 			break;
-		pos = player2Turn(s1);
-		if (CheckForWin(s1, pos))
+		}
+			
+		pos = Turn(s1 , "B");
+		if (CheckForWin(s1, pos, 'B'))
+		{
+			cout << "Player 2 wins (B)";
 			break;
-		displayTheBoard(s1 , NUMBEROFSTACKS);
+		}
+		displayTheBoard(s1, NUMBEROFSTACKS);
 	}
+			
+		
+	
 
 }
 
@@ -64,19 +73,40 @@ void displayTheBoard(Stack s1[] , const int NUMBEROFSTACKS) // displays the whol
 	for (int i = 0; i < NUMBEROFSTACKS; i++)
 	{
 		string s2 = s1[i].toString();
-		reverse(s2.begin(), s2.end());
 		cout << i+1 << " " << s2 << endl;
 		
 	}
 }
 
 
-bool CheckForWin( Stack s1[], int pos) // checks if one of the player won by checking if 4 matching tokens were added
+bool CheckForWin( Stack s1[], int pos , char a) // checks if one of the player won by checking if 4 matching tokens were added
 {
+	static int count = 0; // to know if 7 rounds passed
+	count++;
+	if (count > 7)
+	{
+		return false;
+	}
+	string s = s1[pos].toString();
+	int pCounter = 0 , p2Counter;
+	 // vertical check
+	for (int i = 0; i < s.size(); i++)
+	{
+		if (s[i] == a)
+		{
+			pCounter++;
+		}
+		if (pCounter == 4)
+		{
+			return true;
+		}
+	}
 	return false;
+
+	
 }
 
-int player1Turn(Stack s1[])// to automatically put two diffrent tokens in each one?
+int Turn(Stack s1[] , string a)// to automatically put two diffrent tokens in each one?
 {
 	int pos = pickAPlace();
 	cout << endl << s1[pos].getSize() << endl;
@@ -86,23 +116,10 @@ int player1Turn(Stack s1[])// to automatically put two diffrent tokens in each o
 		pos = pickAPlace();
 		
 	}
-	s1[pos].push("A");
+	s1[pos].push(a);
 	return pos;
 	
 }
 
-int player2Turn(Stack s1[])
-{
-	int pos = pickAPlace();
-	cout << endl << s1[pos].getSize() << endl;
-	while (s1[pos].getSize() >= 7) // to make sure that the user can't choose a full colomn 
-	{
-		cout << "Colom " << pos + 1 << " is full please choose another column\n";  // could remove the button in gui
-		pos = pickAPlace();
-
-	}
-	s1[pos].push("B");
-	return pos;
-}
 
 

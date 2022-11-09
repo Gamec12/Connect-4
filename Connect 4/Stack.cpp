@@ -97,6 +97,7 @@ string Stack::toString()
 		s1 += ptr->data;
 		ptr = ptr->next;
 	}
+	reverse(s1.begin(), s1.end()); // reverses bec stack returns it from top to bottom
 	return s1;
 	
 }
