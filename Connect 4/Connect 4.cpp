@@ -43,6 +43,7 @@ int main()
 		pos = Turn(s1 , "B");
 		if (CheckForWin(s1, pos, 'B'))
 		{
+			displayTheBoard(s1, NUMBEROFSTACKS);
 			cout << "Player 2 wins (B)";
 			break;
 		}
@@ -83,18 +84,19 @@ bool CheckForWin( Stack s1[], int pos , char a) // checks if one of the player w
 {
 	static int count = 0; // to know if 7 rounds passed
 	count++;
-	if (count > 7)
-	{
-		return false;
-	}
+
 	string s = s1[pos].toString();
-	int pCounter = 0 , p2Counter;
+	int pCounter = 0;
 	 // vertical check
 	for (int i = 0; i < s.size(); i++)
 	{
 		if (s[i] == a)
 		{
 			pCounter++;
+		}
+		else
+		{
+			pCounter = 0;
 		}
 		if (pCounter == 4)
 		{
