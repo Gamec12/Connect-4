@@ -13,6 +13,7 @@ bool chechForHorizontal(Stack s1[], int pos, char a);
 //bool CheckForWin(Stack s1[], int pos);
 bool CheckForWin(Stack s1[], int pos , char);
 bool checkdiagonal(Stack s1[], int pos, char a);
+bool chechForDiagonal(Stack s1[], int pos, char a);
 int main()
 {
 
@@ -110,7 +111,12 @@ bool CheckForWin( Stack s1[], int pos , char a) // checks if one of the player w
 	}
 	if (chechForHorizontal(s1, pos, a))
 	{
-		cout << "True";
+
+		return true;
+	}
+
+	if (chechForDiagonal(s1, pos, a))
+	{
 		return true;
 	}
 	return false;
@@ -136,7 +142,10 @@ int Turn(Stack s1[] , string a)// to automatically put two diffrent tokens in ea
 
 bool chechForHorizontal(Stack s1[], int pos, char a)
 {
-
+	/*
+		here the function gets the height of the colmn / stack and then we put all the stacks in an array of strings 
+		this functions checks the entire colomn
+	*/
 	string key = s1[pos].toString();
 	const int temp = key.size();
 	
@@ -151,19 +160,19 @@ bool chechForHorizontal(Stack s1[], int pos, char a)
 	int count = 0;
 	for (int i = 0; i < 7; i++)
 	{
-		
-		
+			
 		if (all2[i].size() >= temp)
 		{
-			all2[i][temp] == a;
-			count++;
+			if (all2[i][temp-1] == a)
+			{
+				count++;
+			}	
 		}
 		else
 		{
 			count = 0;
 		}
 			
-		
 		if (count == 4)
 		{
 			return true;
@@ -174,28 +183,7 @@ bool chechForHorizontal(Stack s1[], int pos, char a)
 }
 
 
-bool checkwin(int size, char arr[], char a)
-{
-	int pCounter = 0;
-	for (int i = 0; i < size; i++)
-	{
-		if (arr[i] == a)
-		{
-			pCounter++;
-		}
-		else
-		{
-			pCounter = 0;
-		}
-		if (pCounter == 4)
-		{
-			return true;
-		}
-	}
-}
-
-//
-//bool checkwin(int size, char arr[],char a)
+//bool checkwin(int size, char arr[], char a)
 //{
 //	int pCounter = 0;
 //	for (int i = 0; i < size; i++)
@@ -214,3 +202,50 @@ bool checkwin(int size, char arr[], char a)
 //		}
 //	}
 //}
+
+bool chechForDiagonal(Stack s1[], int pos, char a)
+{
+
+	string key = s1[pos].toString();
+	int count = 0;
+
+	string* all = new string[7];
+
+	for (int i = 0; i < 7; i++)
+	{
+		all[i] = s1[i].toString();
+	}
+
+	for (int i = 0; i <= 2; i++)
+	{
+
+		int temp = i;
+		for (int j = i; j < 7; j++, i++)
+		{
+			
+			if (all[i].size() >= j)
+			{
+				if (all[i][j] == a)
+				{
+					count++;
+					cout << "inc" << a << "\n";
+				}
+			}
+			else
+			{
+				count = 0;
+			}
+		}
+		i = temp;
+		if (count == 4)
+		{
+			return true;
+		}
+	}
+	return false;
+
+	
+
+}
+
+
