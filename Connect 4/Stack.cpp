@@ -87,7 +87,7 @@ ElementType Stack::top() const
 	return myTop->data;
 }
 
-string Stack::toString()
+string Stack::toString() // to return
 {
 	string s1 = "";
 

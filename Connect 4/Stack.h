@@ -42,7 +42,7 @@ public:
 
 	const Stack& operator= (const Stack& rightSide);
 
-	string toString();
+	string toString(); // returns the entire stack as a string
 
 	int getSize();
 

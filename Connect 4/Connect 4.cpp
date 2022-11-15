@@ -9,13 +9,18 @@ using namespace std;
 int pickAPlace();
 void displayTheBoard(Stack s1[], const int NUMBEROFSTACKS);
 int Turn(Stack s1[] , string);
+bool chechForHorizontal(Stack s1[], int pos, char a);
 //bool CheckForWin(Stack s1[], int pos);
 bool CheckForWin(Stack s1[], int pos , char);
+bool checkdiagonal(Stack s1[], int pos, char a);
 int main()
 {
+
+
+	Stack s;
 	const int NUMBEROFSTACKS = 7;
 	Stack s1[NUMBEROFSTACKS];
-	int round = 0; // to keep track of how many rounds have passed
+	//int round = 0; // to keep track of how many rounds have passed
 	/*for (int i = 0; i < NUMBEROFSTACKS; i++)
 	{
 		s1[i].push("A");
@@ -30,7 +35,7 @@ int main()
 			the main game loop where it will allow each player to once place a token and  then it will check if that player won if not
 			it will allow the next player to enter a token and then check if that player won
 			the board will be displayed after every token is placed
-			this will repat over and over until one player wins
+			this will repeate over and over until one player wins
 		*/
 		pos = Turn(s1, "A");
 		displayTheBoard(s1, NUMBEROFSTACKS);
@@ -60,7 +65,7 @@ int pickAPlace() // user enters the specific colom to place his token in
 	int pos;
 	cout << "choose a place to place your token ";
 	cin >> pos;
-	while (pos < 0 || pos >7) // for input validation
+	while (pos < 1 || pos >7) // for input validation
 	{
 		cout << "please enter a valid number between 1 and 7";
 		cin >> pos;
@@ -82,8 +87,8 @@ void displayTheBoard(Stack s1[] , const int NUMBEROFSTACKS) // displays the whol
 
 bool CheckForWin( Stack s1[], int pos , char a) // checks if one of the player won by checking if 4 matching tokens were added
 {
-	static int count = 0; // to know if 7 rounds passed
-	count++;
+	//static int count = 0; // to know if 7 rounds passed
+	//count++;
 
 	string s = s1[pos].toString();
 	int pCounter = 0;
@@ -103,6 +108,11 @@ bool CheckForWin( Stack s1[], int pos , char a) // checks if one of the player w
 			return true;
 		}
 	}
+	if (chechForHorizontal(s1, pos, a))
+	{
+		cout << "True";
+		return true;
+	}
 	return false;
 
 	
@@ -111,7 +121,7 @@ bool CheckForWin( Stack s1[], int pos , char a) // checks if one of the player w
 int Turn(Stack s1[] , string a)// to automatically put two diffrent tokens in each one?
 {
 	int pos = pickAPlace();
-	cout << endl << s1[pos].getSize() << endl;
+	//cout << endl << s1[pos].getSize() << endl;
 	while (s1[pos].getSize() >=7) // to make sure that the user can't choose a full colomn 
 	{
 		cout << "Colom " << pos+1 << " is full please choose another column\n";  // could remove the button in gui
@@ -124,4 +134,83 @@ int Turn(Stack s1[] , string a)// to automatically put two diffrent tokens in ea
 }
 
 
+bool chechForHorizontal(Stack s1[], int pos, char a)
+{
 
+	string key = s1[pos].toString();
+	const int temp = key.size();
+	
+	string *all2 = new string[7];
+
+	for (int i = 0; i < 7; i++)
+	{
+		all2[i] = s1[i].toString();
+		
+	}
+
+	int count = 0;
+	for (int i = 0; i < 7; i++)
+	{
+		
+		
+		if (all2[i].size() >= temp)
+		{
+			all2[i][temp] == a;
+			count++;
+		}
+		else
+		{
+			count = 0;
+		}
+			
+		
+		if (count == 4)
+		{
+			return true;
+		}
+	}
+	return false;
+	
+}
+
+
+bool checkwin(int size, char arr[], char a)
+{
+	int pCounter = 0;
+	for (int i = 0; i < size; i++)
+	{
+		if (arr[i] == a)
+		{
+			pCounter++;
+		}
+		else
+		{
+			pCounter = 0;
+		}
+		if (pCounter == 4)
+		{
+			return true;
+		}
+	}
+}
+
+//
+//bool checkwin(int size, char arr[],char a)
+//{
+//	int pCounter = 0;
+//	for (int i = 0; i < size; i++)
+//	{
+//		if (arr[i] == a)
+//		{
+//			pCounter++;
+//		}
+//		else
+//		{
+//			pCounter = 0;
+//		}
+//		if (pCounter == 4)
+//		{
+//			return true;
+//		}
+//	}
+//}
