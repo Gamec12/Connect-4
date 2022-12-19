@@ -1,4 +1,5 @@
 #include "Stack.h"
+
 Stack::Stack() :myTop(0)
 {
 	Stack::size = 0;
@@ -99,9 +100,35 @@ string Stack::toString() // to return
 	}
 	reverse(s1.begin(), s1.end()); // reverses bec stack returns it from top to bottom
 	return s1;
-	
+
 }
+
 int Stack::getSize()
 {
 	return size;
+}
+
+bool Stack::hasPosition(int position)
+{
+	NodePointer ptr = myTop;
+	int count = 0;
+	while (ptr != NULL)
+	{
+		if (count == position)
+			return true;
+		ptr = ptr->next;
+		count++;
+	}
+	return false;
+}
+
+
+ElementType& Stack::operator[](int index)
+{
+	NodePointer ptr = myTop;
+	for (int i = 0; i < index; i++)
+	{
+		ptr = ptr->next;
+	}
+	return ptr->data;
 }

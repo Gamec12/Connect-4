@@ -6,246 +6,121 @@
 #include "Stack.h";
 
 using namespace std;
-int pickAPlace();
-void displayTheBoard(Stack s1[], const int NUMBEROFSTACKS);
-int Turn(Stack s1[] , string);
-bool chechForHorizontal(Stack s1[], int pos, char a);
-//bool CheckForWin(Stack s1[], int pos);
-bool CheckForWin(Stack s1[], int pos , char);
-bool checkdiagonal(Stack s1[], int pos, char a);
-bool chechForDiagonal(Stack s1[], int pos, char a);
-int main()
-{
 
+class Board {
+public:
+	Stack board[7];
+	Board() {};
+	void printBoard() {
+		char** temp = toArray();
 
-	Stack s;
-	const int NUMBEROFSTACKS = 7;
-	Stack s1[NUMBEROFSTACKS];
-	//int round = 0; // to keep track of how many rounds have passed
-	/*for (int i = 0; i < NUMBEROFSTACKS; i++)
-	{
-		s1[i].push("A");
-		s1[i].push("B");
-	}*/
-	//int check = true;
-	int pos;
-	displayTheBoard(s1, NUMBEROFSTACKS);
-	while (true) 
-	{
-		/*
-			the main game loop where it will allow each player to once place a token and  then it will check if that player won if not
-			it will allow the next player to enter a token and then check if that player won
-			the board will be displayed after every token is placed
-			this will repeate over and over until one player wins
-		*/
-		pos = Turn(s1, "A");
-		displayTheBoard(s1, NUMBEROFSTACKS);
-		if (CheckForWin(s1, pos , 'A'))
-		{
-			cout << "Player 1 has won (A)";
-			break;
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 7; j++) {
+				cout << temp[i][j] << " ";
+			}
+			cout << endl;
 		}
-			
-		pos = Turn(s1 , "B");
-		if (CheckForWin(s1, pos, 'B'))
-		{
-			displayTheBoard(s1, NUMBEROFSTACKS);
-			cout << "Player 2 wins (B)";
-			break;
-		}
-		displayTheBoard(s1, NUMBEROFSTACKS);
+
 	}
-			
-		
-	
+	void addPiece(int column, char piece) {
+		board[column].push(piece);
+	}
+	bool isFull(int column) {
+		return board[column].getSize() == 6;
+	}
+	bool isWin() {
+		char** temp = toArray();
+		// check horizontal
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (temp[i][j] != '_' && temp[i][j] == temp[i][j + 1] && temp[i][j] == temp[i][j + 2] && temp[i][j] == temp[i][j + 3]) {
+					return true;
+				}
+			}
+		}
+		// check vertical
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 7; j++) {
+				if (temp[i][j] != '_' && temp[i][j] == temp[i + 1][j] && temp[i][j] == temp[i + 2][j] && temp[i][j] == temp[i + 3][j]) {
+					return true;
+				}
+			}
+		}
+		// check diagonal
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (temp[i][j] != '_' && temp[i][j] == temp[i + 1][j + 1] && temp[i][j] == temp[i + 2][j + 2] && temp[i][j] == temp[i + 3][j + 3]) {
+					return true;
+				}
+			}
+		}
+		// check diagonal
+		for (int i = 0; i < 3; i++) {
+			for (int j = 3; j < 7; j++) {
+				if (temp[i][j] != '_' && temp[i][j] == temp[i + 1][j - 1] && temp[i][j] == temp[i + 2][j - 2] && temp[i][j] == temp[i + 3][j - 3]) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	char** toArray() {
+		char** temp = new char* [6];
+		for (int i = 0; i < 6; i++) {
+			temp[i] = new char[7];
+		}
+		for (int i = 0; i < 7; i++) {
+			Stack tempStack;
+			for (int j = 0; j < board[i].getSize(); j++) {
+				tempStack.push(board[i][j]);
+			}
+			for (int j = 5; j >= 0; j--) {
+				if (board[i].hasPosition(j)) {
+					temp[5 - j][i] = tempStack[j];
+				}
+				else {
+					temp[5 - j][i] = '_';
+				}
+			}
+		}
+		return temp;
+	}
 
-}
+};
 
-int pickAPlace() // user enters the specific colom to place his token in
+int pickAPlace(char token)
 {
 	int pos;
-	cout << "choose a place to place your token ";
+	cout << endl << "<" << token << "> Choose a column for your token - ";
 	cin >> pos;
-	while (pos < 1 || pos >7) // for input validation
+	if (pos < 1 || pos > 7)
 	{
-		cout << "please enter a valid number between 1 and 7";
-		cin >> pos;
+		cout << "Invalid column. Try again." << endl;
+		return pickAPlace(token);
 	}
-		
 	return pos - 1;
 }
 
-void displayTheBoard(Stack s1[] , const int NUMBEROFSTACKS) // displays the whole board with the number of coloms
+int main()
 {
-	for (int i = 0; i < NUMBEROFSTACKS; i++)
-	{
-		string s2 = s1[i].toString();
-		cout << i+1 << " " << s2 << endl;
-		
-	}
-}
-
-
-bool CheckForWin( Stack s1[], int pos , char a) // checks if one of the player won by checking if 4 matching tokens were added
-{
-	//static int count = 0; // to know if 7 rounds passed
-	//count++;
-
-	string s = s1[pos].toString();
-	int pCounter = 0;
-	 // vertical check
-	for (int i = 0; i < s.size(); i++)
-	{
-		if (s[i] == a)
-		{
-			pCounter++;
+	Board board;
+	char token = 'X';
+	while (true) {
+		board.printBoard();
+		int pos = pickAPlace(token);
+		if (board.isFull(pos)) {
+			cout << "That column is full. Please choose another column." << endl;
+			continue;
 		}
-		else
-		{
-			pCounter = 0;
-		}
-		if (pCounter == 4)
-		{
-			return true;
-		}
-	}
-	if (chechForHorizontal(s1, pos, a))
-	{
-
-		return true;
-	}
-
-	if (chechForDiagonal(s1, pos, a))
-	{
-		return true;
-	}
-	return false;
-
-	
-}
-
-int Turn(Stack s1[] , string a)// to automatically put two diffrent tokens in each one?
-{
-	int pos = pickAPlace();
-	//cout << endl << s1[pos].getSize() << endl;
-	while (s1[pos].getSize() >=7) // to make sure that the user can't choose a full colomn 
-	{
-		cout << "Colom " << pos+1 << " is full please choose another column\n";  // could remove the button in gui
-		pos = pickAPlace();
-		
-	}
-	s1[pos].push(a);
-	return pos;
-	
-}
-
-
-bool chechForHorizontal(Stack s1[], int pos, char a)
-{
-	/*
-		here the function gets the height of the colmn / stack and then we put all the stacks in an array of strings 
-		this functions checks the entire colomn
-	*/
-	string key = s1[pos].toString();
-	const int temp = key.size();
-	
-	string *all2 = new string[7];
-
-	for (int i = 0; i < 7; i++)
-	{
-		all2[i] = s1[i].toString();
-		
-	}
-
-	int count = 0;
-	for (int i = 0; i < 7; i++)
-	{
-			
-		if (all2[i].size() >= temp)
-		{
-			if (all2[i][temp-1] == a)
-			{
-				count++;
-			}	
-		}
-		else
-		{
-			count = 0;
-		}
-			
-		if (count == 4)
-		{
-			return true;
-		}
-	}
-	return false;
-	
-}
-
-
-//bool checkwin(int size, char arr[], char a)
-//{
-//	int pCounter = 0;
-//	for (int i = 0; i < size; i++)
-//	{
-//		if (arr[i] == a)
-//		{
-//			pCounter++;
-//		}
-//		else
-//		{
-//			pCounter = 0;
-//		}
-//		if (pCounter == 4)
-//		{
-//			return true;
-//		}
-//	}
-//}
-
-bool chechForDiagonal(Stack s1[], int pos, char a)
-{
-
-	string key = s1[pos].toString();
-	int count = 0;
-
-	string* all = new string[7];
-
-	for (int i = 0; i < 7; i++)
-	{
-		all[i] = s1[i].toString();
-	}
-
-	for (int i = 0; i <= 2; i++)
-	{
-
-		int temp = i;
-		for (int j = i; j < 7; j++, i++)
-		{
-			
-			if (all[i].size() >= j)
-			{
-				if (all[i][j] == a)
-				{
-					count++;
-					cout << "inc" << a << "\n";
-				}
-			}
-			else
-			{
-				count = 0;
+		else {
+			board.addPiece(pos, token);
+			if (board.isWin()) {
+				board.printBoard();
+				cout << "Player " << token << " wins!" << endl;
+				break;
 			}
 		}
-		i = temp;
-		if (count == 4)
-		{
-			return true;
-		}
+
+		token = (token == 'X') ? 'O' : 'X';
 	}
-	return false;
-
-	
-
 }
-
-
